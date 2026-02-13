@@ -21,7 +21,7 @@ class Ball {
         this.y = Math.random() * canvas.height;
         this.dx = (Math.random() - 0.5) * 6;
         this.dy = (Math.random() - 0.5) * 6;
-        this.color = '#ff6b00'; // Basketball Orange
+        this.color = '#ff6b00'; 
     }
 
     draw() {
@@ -29,8 +29,6 @@ class Ball {
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
         ctx.fillStyle = this.color;
         ctx.fill();
-        
-        // Basketball lines
         ctx.strokeStyle = '#000';
         ctx.lineWidth = 2;
         ctx.stroke();
@@ -42,7 +40,6 @@ class Ball {
     }
 
     update() {
-        // Bounce off walls
         if (this.x + this.radius > canvas.width || this.x - this.radius < 0) this.dx = -this.dx;
         if (this.y + this.radius > canvas.height || this.y - this.radius < 0) this.dy = -this.dy;
         
@@ -59,26 +56,33 @@ class Ball {
     }
 
     pop() {
-    score++;
-    if (scoreElement) scoreElement.innerText = score;
+        score++;
+        if (scoreElement) scoreElement.innerText = score;
 
-    // --- ADD THIS NEW PART HERE ---
-    if (score === 10) {
-        const overlay = document.getElementById('video-overlay');
-        const video = document.getElementById('highlight-video');
-        overlay.style.display = 'flex';
-        video.play();
-    }
-    // ------------------------------
+        // Video Trigger at 10 Points
+        if (score === 10) {
+            const overlay = document.getElementById('video-overlay');
+            const video = document.getElementById('highlight-video');
+            if (overlay && video) {
+                overlay.style.display = 'flex';
+                video.play();
+            }
+        }
 
-    if (scoreboard) {
-        scoreboard.classList.remove('score-bump');
-        void scoreboard.offsetWidth; 
-        scoreboard.classList.add('score-bump');
-    }
-    
-    // ... rest of your ball visual feedback code ...
-}
+        // Scoreboard Animation
+        if (scoreboard) {
+            scoreboard.classList.remove('score-bump');
+            void scoreboard.offsetWidth; 
+            scoreboard.classList.add('score-bump');
+        }
+
+        // Ball Visual Feedback (Flash and Speed)
+        this.color = '#fff';
+        this.dx *= 1.4;
+        this.dy *= 1.4;
+        setTimeout(() => {
+            this.color = '#ff6b00';
+        }, 100);
     }
 }
 
@@ -102,9 +106,13 @@ function animate() {
 }
 
 animate();
+
+// 5. VIDEO CLOSE BUTTON
 document.getElementById('close-video').addEventListener('click', () => {
     const overlay = document.getElementById('video-overlay');
     const video = document.getElementById('highlight-video');
-    overlay.style.display = 'none';
-    video.pause();
+    if (overlay && video) {
+        overlay.style.display = 'none';
+        video.pause();
+    }
 });
