@@ -72,3 +72,32 @@ a { color: var(--primary); text-decoration: none; font-weight: bold; }
     50% { transform: scale(1.2); }
     100% { transform: scale(1); }
 }
+#video-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: black;
+    z-index: 9999; /* Ensure it's above everything */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#highlight-video {
+    max-height: 80vh;
+    box-shadow: 0 0 50px var(--primary);
+}
+
+#close-video {
+    margin-top: 20px;
+    padding: 10px 30px;
+    background: var(--primary);
+    border: none;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 5px;
+}
