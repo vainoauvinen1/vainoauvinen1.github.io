@@ -3,24 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Name | Portfolio</title>
+    <title>V6'7 | Portfolio</title>
     <link rel="stylesheet" href="style.css">
 </head>
-    <div id="video-overlay" style="display: none;">
-    <video id="highlight-video" width="100%" height="100%">
-        <source src="IMG_8724.mov" type="video/mp4">
-        Your browser does not support the video tag.
-    </video>
-    <button id="close-video">Back to Portfolio</button>
-</div>
 <body>
     <div id="scoreboard">Baskets: <span id="score">0</span></div>
+
     <canvas id="bgCanvas"></canvas>
 
     <main class="content">
         <section id="hero">
             <h1>V6'7</h1>
-            <p class="subtitle">hoops enthusiast</p>
+            <p class="subtitle">Hoops Enthusiast & Developer</p>
         </section>
 
         <section id="projects">
@@ -41,9 +35,21 @@
 
         <section id="contact">
             <h2>Get In Touch</h2>
-            <p>Email: <a href="mailto:your@email.com">v67@gmail.com</a></p>
+            <p>Email: <a href="mailto:v67@gmail.com">v67@gmail.com</a></p>
         </section>
+        
+        <p style="margin-top: 50px; color: rgba(255,255,255,0.4);">
+            Score 10 points to unlock highlights 🏀
+        </p>
     </main>
+
+    <div id="video-overlay">
+        <video id="highlight-video" playsinline>
+            <source src="IMG_8724.mov" type="video/quicktime">
+            <source src="IMG_8724.mov" type="video/mp4">
+        </video>
+        <button id="close-video">Back to Portfolio</button>
+    </div>
 
     <script src="script.js"></script>
 </body>
