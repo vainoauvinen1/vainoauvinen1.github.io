@@ -85,3 +85,30 @@ window.addEventListener('resize', () => {
 });
 
 animate();
+// New Global Score Variable
+let score = 0;
+const scoreElement = document.getElementById('score');
+const scoreboard = document.getElementById('scoreboard');
+
+// ... (Keep the rest of your Ball class the same until the pop() method)
+
+    pop() {
+        // Increment Score
+        score++;
+        scoreElement.innerText = score;
+
+        // Visual Feedback
+        scoreboard.classList.remove('score-bump');
+        void scoreboard.offsetWidth; // Trigger reflow to restart animation
+        scoreboard.classList.add('score-bump');
+
+        // Change ball color and boost speed
+        this.color = '#fff';
+        this.dx *= 1.2; 
+        this.dy *= 1.2;
+        
+        setTimeout(() => {
+            this.color = '#ff6b00';
+        }, 100);
+    }
+// ... (Rest of the script remains the same)
