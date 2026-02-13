@@ -21,7 +21,7 @@ class Ball {
         this.y = Math.random() * canvas.height;
         this.dx = (Math.random() - 0.5) * 6;
         this.dy = (Math.random() - 0.5) * 6;
-        this.color = '#ff6b00'; 
+        this.color = '#ff6b00'; // Basketball Orange
     }
 
     draw() {
@@ -29,11 +29,12 @@ class Ball {
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
         ctx.fillStyle = this.color;
         ctx.fill();
+        
+        // Basketball Seams
         ctx.strokeStyle = '#000';
         ctx.lineWidth = 2;
         ctx.stroke();
         
-        // Basketball Seam line
         ctx.beginPath();
         ctx.moveTo(this.x - this.radius, this.y);
         ctx.lineTo(this.x + this.radius, this.y);
@@ -41,7 +42,7 @@ class Ball {
     }
 
     update() {
-        // Wall Collision
+        // Wall Bounce Logic
         if (this.x + this.radius > canvas.width || this.x - this.radius < 0) this.dx = -this.dx;
         if (this.y + this.radius > canvas.height || this.y - this.radius < 0) this.dy = -this.dy;
         
@@ -58,7 +59,7 @@ class Ball {
     }
 
     pop() {
-        // Increment Score Logic
+        // Increment Score
         score++;
         if (scoreElement) scoreElement.innerText = score;
 
@@ -69,7 +70,7 @@ class Ball {
             scoreboard.classList.add('score-bump');
         }
 
-        // --- VIDEO UNLOCK LOGIC ---
+        // UNLOCK VIDEO AT 10 POINTS
         if (score === 10) {
             const overlay = document.getElementById('video-overlay');
             const video = document.getElementById('highlight-video');
@@ -79,7 +80,18 @@ class Ball {
             }
         }
 
-        // Ball Visual Feedback (Flash white and speed up)
+        // Ball Feedback (Flash and Speed boost)
         this.color = '#fff';
         this.dx *= 1.4;
-        this.dy *= 1
+        this.dy *= 1.4;
+        
+        setTimeout(() => {
+            this.color = '#ff6b00';
+        }, 100);
+    }
+}
+
+// 3. INITIALIZATION
+const balls = Array.from({ length: 15 }, () => new Ball());
+
+//
