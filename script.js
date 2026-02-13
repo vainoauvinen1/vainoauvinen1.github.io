@@ -1,9 +1,15 @@
+// 1. SETUP & VARIABLES
 const canvas = document.getElementById('bgCanvas');
 const ctx = canvas.getContext('2d');
 
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
+let score = 0;
+const scoreElement = document.getElementById('score');
+const scoreboard = document.getElementById('scoreboard');
+
+// 2. BALL CLASS DEFINITION
 class Ball {
     constructor() {
         this.reset();
@@ -15,7 +21,7 @@ class Ball {
         this.y = Math.random() * canvas.height;
         this.dx = (Math.random() - 0.5) * 6;
         this.dy = (Math.random() - 0.5) * 6;
-        this.color = '#ff6b00'; // Default Basketball Orange
+        this.color = '#ff6b00'; // Basketball Orange
     }
 
     draw() {
@@ -24,18 +30,19 @@ class Ball {
         ctx.fillStyle = this.color;
         ctx.fill();
         
-        // Drawing the "seams" of the basketball
+        // Basketball lines
         ctx.strokeStyle = '#000';
         ctx.lineWidth = 2;
         ctx.stroke();
         
-        // Simple cross-line for basketball look
+        ctx.beginPath();
         ctx.moveTo(this.x - this.radius, this.y);
         ctx.lineTo(this.x + this.radius, this.y);
         ctx.stroke();
     }
 
     update() {
+        // Bounce off walls
         if (this.x + this.radius > canvas.width || this.x - this.radius < 0) this.dx = -this.dx;
         if (this.y + this.radius > canvas.height || this.y - this.radius < 0) this.dy = -this.dy;
         
@@ -44,7 +51,6 @@ class Ball {
         this.draw();
     }
 
-    // Check if the click coordinates are inside the ball
     checkClick(mouseX, mouseY) {
         const distance = Math.hypot(mouseX - this.x, mouseY - this.y);
         if (distance < this.radius) {
@@ -53,62 +59,45 @@ class Ball {
     }
 
     pop() {
-        // Flash white and speed up when clicked
+        // Increment Score Logic
+        score++;
+        if (scoreElement) scoreElement.innerText = score;
+
+        // Scoreboard Animation
+        if (scoreboard) {
+            scoreboard.classList.remove('score-bump');
+            void scoreboard.offsetWidth; // Force CSS reflow
+            scoreboard.classList.add('score-bump');
+        }
+
+        // Ball Visual Feedback
         this.color = '#fff';
-        this.dx *= 1.5; 
-        this.dy *= 1.5;
+        this.dx *= 1.4; // Speed boost
+        this.dy *= 1.4;
         
-        // Reset color after 100ms
         setTimeout(() => {
             this.color = '#ff6b00';
         }, 100);
     }
 }
 
+// 3. INITIALIZATION & EVENTS
 const balls = Array.from({ length: 15 }, () => new Ball());
 
-// Listen for clicks
 window.addEventListener('click', (event) => {
     balls.forEach(ball => ball.checkClick(event.clientX, event.clientY));
 });
 
+window.addEventListener('resize', () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+});
+
+// 4. ANIMATION LOOP
 function animate() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     balls.forEach(ball => ball.update());
     requestAnimationFrame(animate);
 }
 
-// Handle window resize
-window.addEventListener('resize', () => {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-});
-
 animate();
-// New Global Score Variable
-let score = 0;
-const scoreElement = document.getElementById('score');
-const scoreboard = document.getElementById('scoreboard');
-
-// ... (Keep the rest of your Ball class the same until the pop() method)
-
-    pop() {
-        // Increment Score
-        score++;
-        scoreElement.innerText = score;
-
-        // Visual Feedback
-        scoreboard.classList.remove('score-bump');
-        void scoreboard.offsetWidth; // Trigger reflow to restart animation
-        scoreboard.classList.add('score-bump');
-
-        // Change ball color and boost speed
-        this.color = '#fff';
-        this.dx *= 1.2; 
-        this.dy *= 1.2;
-        
-        setTimeout(() => {
-            this.color = '#ff6b00';
-        }, 100);
-    }
-// ... (Rest of the script remains the same)
