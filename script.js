@@ -33,6 +33,7 @@ class Ball {
         ctx.lineWidth = 2;
         ctx.stroke();
         
+        // Basketball Seam line
         ctx.beginPath();
         ctx.moveTo(this.x - this.radius, this.y);
         ctx.lineTo(this.x + this.radius, this.y);
@@ -40,6 +41,7 @@ class Ball {
     }
 
     update() {
+        // Wall Collision
         if (this.x + this.radius > canvas.width || this.x - this.radius < 0) this.dx = -this.dx;
         if (this.y + this.radius > canvas.height || this.y - this.radius < 0) this.dy = -this.dy;
         
@@ -56,10 +58,18 @@ class Ball {
     }
 
     pop() {
+        // Increment Score Logic
         score++;
         if (scoreElement) scoreElement.innerText = score;
 
-        // Video Trigger at 10 Points
+        // Scoreboard Animation
+        if (scoreboard) {
+            scoreboard.classList.remove('score-bump');
+            void scoreboard.offsetWidth; // Force CSS reflow
+            scoreboard.classList.add('score-bump');
+        }
+
+        // --- VIDEO UNLOCK LOGIC ---
         if (score === 10) {
             const overlay = document.getElementById('video-overlay');
             const video = document.getElementById('highlight-video');
@@ -69,50 +79,7 @@ class Ball {
             }
         }
 
-        // Scoreboard Animation
-        if (scoreboard) {
-            scoreboard.classList.remove('score-bump');
-            void scoreboard.offsetWidth; 
-            scoreboard.classList.add('score-bump');
-        }
-
-        // Ball Visual Feedback (Flash and Speed)
+        // Ball Visual Feedback (Flash white and speed up)
         this.color = '#fff';
         this.dx *= 1.4;
-        this.dy *= 1.4;
-        setTimeout(() => {
-            this.color = '#ff6b00';
-        }, 100);
-    }
-}
-
-// 3. INITIALIZATION & EVENTS
-const balls = Array.from({ length: 15 }, () => new Ball());
-
-window.addEventListener('click', (event) => {
-    balls.forEach(ball => ball.checkClick(event.clientX, event.clientY));
-});
-
-window.addEventListener('resize', () => {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-});
-
-// 4. ANIMATION LOOP
-function animate() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    balls.forEach(ball => ball.update());
-    requestAnimationFrame(animate);
-}
-
-animate();
-
-// 5. VIDEO CLOSE BUTTON
-document.getElementById('close-video').addEventListener('click', () => {
-    const overlay = document.getElementById('video-overlay');
-    const video = document.getElementById('highlight-video');
-    if (overlay && video) {
-        overlay.style.display = 'none';
-        video.pause();
-    }
-});
+        this.dy *= 1
